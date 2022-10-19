@@ -68,8 +68,7 @@ Example user flow:
     my_data = {}
     my_data['code'] = r['access_code']
     my_data['grant_type'] = 'authorization_code'
-    # for some reason, you DONT need to url encode this callback_uri
-    my_data['redirect_uri'] = 'http://127.0.0.1:8080/callback' 
+    my_data['redirect_uri'] = 'http://127.0.0.1:8080/callback'       # NO need to url encode this callback_uri
     my_data['code_verifier'] = session['twitter_code_challenge']
     my_data['code_challenge_method'] = session['twitter_code_challenge_method']
 
