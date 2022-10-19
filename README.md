@@ -1,6 +1,6 @@
 # Twitter OAuth2 Implementation Guide
 How to implement Twitter's OAuth2 (Python)
-(the writeup I wish existed before I tried to implement it)
+The writeup I wish existed before I tried to implement it. tweepy and python-twitter do not support OAuth2 on Twitter properly. And the Twitter documentation seems to lack a lot.
 
 ## Twitter developer portal setup
 1. Goto https://developer.twitter.com/en/portal
@@ -40,7 +40,7 @@ Example user flow:
  * callback_uri: where you want twitter to send the user after they login. ** see note about CALLBACK_URI below **
  
  ### A note about CALLBACK_URI
- Twitter wants are urlencoded callback uri. So, don't submit: https://127.0.0.1/callback.
+ In this step, Twitter wants a url encoded callback uri. So, don't submit: https://127.0.0.1/callback.
  Do submit: ``https%3A%2F%2F127.0.0.1%3A8080%2Fcallback``
  
  ## step 2: on /callback you need to parse the response then submit to get the access_token
@@ -68,6 +68,7 @@ Example user flow:
     my_data = {}
     my_data['code'] = r['access_code']
     my_data['grant_type'] = 'authorization_code'
+    # for some reason, you DONT need to url encode this callback_uri
     my_data['redirect_uri'] = 'http://127.0.0.1:8080/callback' 
     my_data['code_verifier'] = session['twitter_code_challenge']
     my_data['code_challenge_method'] = session['twitter_code_challenge_method']
@@ -76,15 +77,14 @@ Example user flow:
     url = 'https://api.twitter.com/2/oauth2/token'
     x = requests.post(url, headers=my_header, data=my_data)
 
-    r['post_return_text'] = x.json()
-    r['access_token'] = r['post_return_text']['access_token']
+    y = x.json()
+    r['access_token'] = y['access_token']
 ```
 
 ** Save the access_token for the user **
 
 ### step 3: You have credentials for the user, do something useful
 Let's get some info about the user
-
 
 ```
     # get info about the user
@@ -93,13 +93,17 @@ Let's get some info about the user
     my_header = {}
     my_header["Authorization"] = "Bearer " + r['access_token']
     x = requests.get(url, headers=my_header)
+    
     r['twitter_user_detail'] = x.json()
-
-    this_twitter_user_id = r['twitter_user_detail']['data']['id']
-    r['this_twitter_user'] = this_twitter_user_id
+    
+    r['this_twitter_user'] = r['twitter_user_detail']['data']['id']
     r['twitter_username'] = r['twitter_user_detail']['data']['username']
     r['twitter_follower_count'] = r['twitter_user_detail']['data']['public_metrics']['followers_count']
     r['twitter_following_count'] = r['twitter_user_detail']['data']['public_metrics']['following_count']
     r['twitter_tweet_count'] = r['twitter_user_detail']['data']['public_metrics']['tweet_count']
 ```
 
+### step 4: refresh the access_token
+You will need to periodically refresh the access_token if you want to continue processing requests without user interaction.
+
+[coming soon]
