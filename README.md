@@ -46,8 +46,7 @@ Example user flow:
  ## step 2: on /callback you need to parse the response then submit to get the access_token
  Using variables from the /callback url, send a request to twitter to get the access_token
  
- ``
- 
+ ```
     # parse variables from the url
     r = {}
     r['access_code'] = request.args.get('code')
@@ -79,14 +78,15 @@ Example user flow:
 
     r['post_return_text'] = x.json()
     r['access_token'] = r['post_return_text']['access_token']
-``
+```
 
 ** Save the access_token for the user **
 
 ### step 3: You have credentials for the user, do something useful
 Let's get some info about the user
 
-``
+
+```
     # get info about the user
     url = "https://api.twitter.com/2/users/me?"  + \      
         "user.fields=created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
@@ -101,5 +101,5 @@ Let's get some info about the user
     r['twitter_follower_count'] = r['twitter_user_detail']['data']['public_metrics']['followers_count']
     r['twitter_following_count'] = r['twitter_user_detail']['data']['public_metrics']['following_count']
     r['twitter_tweet_count'] = r['twitter_user_detail']['data']['public_metrics']['tweet_count']
-``
+```
 
