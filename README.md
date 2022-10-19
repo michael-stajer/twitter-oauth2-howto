@@ -69,8 +69,7 @@ Example user flow:
     my_data = {}
     my_data['code'] = r['access_code']
     my_data['grant_type'] = 'authorization_code'
-    #my_data['redirect_uri'] = 'http://127.0.0.1:8080/callback' 
-    my_data['redirect_uri'] = 'https://onboarding.wild.xyz/callback'
+    my_data['redirect_uri'] = 'http://127.0.0.1:8080/callback' 
     my_data['code_verifier'] = session['twitter_code_challenge']
     my_data['code_challenge_method'] = session['twitter_code_challenge_method']
 
@@ -78,7 +77,6 @@ Example user flow:
     url = 'https://api.twitter.com/2/oauth2/token'
     x = requests.post(url, headers=my_header, data=my_data)
 
-    r['post_return'] = x
     r['post_return_text'] = x.json()
     r['access_token'] = r['post_return_text']['access_token']
 ``
@@ -87,8 +85,8 @@ Example user flow:
 
 ### step 3: You have credentials for the user, do something useful
 Let's get some info about the user
-``
 
+``
     # get info about the user
     url = "https://api.twitter.com/2/users/me?"  + \      
         "user.fields=created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
@@ -103,7 +101,5 @@ Let's get some info about the user
     r['twitter_follower_count'] = r['twitter_user_detail']['data']['public_metrics']['followers_count']
     r['twitter_following_count'] = r['twitter_user_detail']['data']['public_metrics']['following_count']
     r['twitter_tweet_count'] = r['twitter_user_detail']['data']['public_metrics']['tweet_count']
-      
-
 ``
 
