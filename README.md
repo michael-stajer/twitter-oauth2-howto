@@ -5,8 +5,8 @@ The writeup I wish existed before I tried to implement it. tweepy and python-twi
 ## Twitter developer portal setup
 1. Goto https://developer.twitter.com/en/portal
 1. create a new project
-1. get a twitter client id
-1. get a twitter client secret
+1. get a twitter oauth client id (under user authentication settings)
+1. get a twitter oauth client secret (under user authentication settings)
 1. Setup the User Authentication Settings 
 -- be sure to setup your local and production callback urls (ie: http://127.0.0.1:8080/callback and https://production.com/callback)
 
@@ -40,7 +40,7 @@ Example user flow:
  * callback_uri: where you want twitter to send the user after they login. ** see note about CALLBACK_URI below **
  
  ### A note about CALLBACK_URI
- In this step, Twitter wants a url encoded callback uri. So, don't submit: https://127.0.0.1/callback.
+ In this step, Twitter wants a url encoded callback uri. So, don't submit: https://127.0.0.1:8080/callback.
  Do submit: ``https%3A%2F%2F127.0.0.1%3A8080%2Fcallback``
  
  ## step 2: on /callback you need to parse the response then submit to get the access_token
